@@ -1,0 +1,35 @@
+\documentclass[tikz,border=50mm]{standalone}
+\input{preambule}
+\begin{document}
+%The figure has been scaled so it may seem more clear
+\begin{tikzpicture}[>=stealth, scale=2.5]
+%x_axis
+\draw[->] (-5,0)--(2,0)node[above]{$\vec{e}_x$};
+%the arc and the infinitesimal portion dl
+\draw[cyan, ultra thick] (135:4) arc(135:225:4);
+\draw[<->,blue, ultra thick] (150:4)arc(150:155:4);
+\node[left, blue] at (152:4) {$dl$} ;
+%electric field created by dl
+\draw[->, blue, thick] (-1,0)--(0.5,-1) node[below] {$d\vec{E}$};
+\draw[dashed] (150:4)--(-1,0) node[midway, above] {$r$};
+\draw[dashed] (155:4)--(-1,0);
+%Marking coordinates 
+\coordinate(o) at (-1,0);
+\coordinate(x) at (-3,0);
+\coordinate(y) at (3,0);
+\coordinate(a) at (155:4);
+\coordinate(c) at (150:4);
+\coordinate(e) at (0.5,-1);
+%angles
+\pic[ draw,inner sep=1pt, circle, draw,angle 
+eccentricity=1.2, "$\theta$", angle radius = 10mm] {angle = a--o--x};
+\pic[ draw,inner sep=1pt, circle, draw,angle 
+eccentricity=1.2, "$\theta$", angle radius = 10mm] {angle = e--o--y};
+\pic[ draw,inner sep=1pt, circle, draw,angle 
+eccentricity=1.2, "\rotatebox{-25}{$d\theta$}", angle radius = 28mm] {angle = c--o--a};
+%The origin + projection of dE
+\filldraw[blue] (-1,0)circle(0.025)node[below=0.1] {$O$};
+\draw[dashed] (0.5,-1)--(0.5,0);
+\draw[blue, ->, thick] (-1,0)--(0.5,0) node[above, midway] {$d\vec{E}_x$};
+\end{tikzpicture}
+\end{document}
