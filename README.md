@@ -1,5 +1,5 @@
 # TikZ-elf
-This is a simple repository of some figures I've drawn using the famous LaTeX package TikZ 
+This is a humble collection of some figures I've drawn using the famous LaTeX package TikZ 
 I'm waiting for everyone's contribution to make the following codes simple to new LaTeX and TikZ users. 
 
 You can contact me on : 
