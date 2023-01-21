@@ -1,0 +1,67 @@
+\documentclass[tikz,border=30mm]{standalone}
+\input{prbl}
+\usepackage{amsmath, amsfonts}
+%defining new colors : 
+
+\definecolor{eblue}{HTML}{00FFF6}
+\definecolor{eblack}{HTML}{212529}
+\definecolor{emauve}{HTML}{4C0033}
+
+%The code below is taken from this post tex.stackexchange.com/questions/59406/tikz-how-to-draw-an-isometric-drawing-in-tikz 
+
+
+\makeatletter
+\tikzoption{canvas is plane}[]{\@setOxy#1}
+\def\@setOxy O(#1,#2,#3)x(#4,#5,#6)y(#7,#8,#9)%
+  {\def\tikz@plane@origin{\pgfpointxyz{#1}{#2}{#3}}%
+   \def\tikz@plane@x{\pgfpointxyz{#4}{#5}{#6}}%
+   \def\tikz@plane@y{\pgfpointxyz{#7}{#8}{#9}}%
+   \tikz@canvas@is@plane
+  }
+\makeatother  
+
+
+\begin{document}
+
+
+
+\pagecolor{emauve!60!black}
+\color{white}
+
+\tdplotsetmaincoords{70}{120}
+\begin{tikzpicture}[>=stealth,tdplot_main_coords, scale=1.5]
+
+
+\def\ang{3*pi}
+\def\r{2*pi}
+\def\abs{6*pi}
+
+%The cosine plot 'Watch out there's a minus sign'
+\begin{scope}[canvas is xy plane at z=0,]
+\draw[dotted, line width=0.15mm, eblue,step=pi] (0,0) grid (\abs,\abs);
+\draw[eviolet, line width=1.5mm, samples=200, variable=\t,domain=0:\abs] plot({-\r*cos(\t r)+\ang},\t);
+\end{scope}
+
+%The sine plot
+\begin{scope}[canvas is yz plane at x=0,]
+\draw[dotted, line width=0.15mm, eblue, step=pi] (0,0) grid (\abs,\abs);
+\draw[eviolet, line width=1.5mm, samples=200, variable=\t,domain=0:\abs] plot(\t,{\r*sin(\t r)+\ang});
+
+\foreach \i/\j in {pi/$\pi$ , 2*pi/$2\pi$, 3*pi/$3\pi$, 4*pi/$4\pi$, 5*pi/$5\pi$, 6*pi/$6\pi$}{
+  \node[above, scale=5, eviolet] at (\i, \abs) {\j};
+}
+
+\end{scope}
+
+%The circle 
+\begin{scope}[canvas is zx plane at y=0,]
+\draw[dotted, line width=0.15mm, eblue, step=pi] (0,0) grid (\abs,\abs);
+\draw[eviolet, line width=1.5mm] (\ang ,\ang)circle(\r);
+\end{scope}
+
+%The parametric curve
+\draw[dashed, eblue, line width=1mm,  variable=\t,domain=0:6*pi,samples=500] plot ({-\r*cos(\t r)+\ang},{\t},{\r*sin(\t r)+\ang});
+
+\node[eblue, scale=5.5] at (4*pi,0,7*pi) {$e^{ix}=\cos x +i\sin x$}; 
+\end{tikzpicture}
+\end{document}
