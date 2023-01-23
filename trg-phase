@@ -1,0 +1,50 @@
+\input{prbl.tex}
+\usepackage{amsmath, amsfonts}
+
+%defining new colors : 
+
+\definecolor{eblue}{HTML}{00FFF6}
+\definecolor{eblack}{HTML}{212529}
+\definecolor{emauve}{HTML}{440047}
+\definecolor{eviolet}{HTML}{E11D74}
+\definecolor{egreen}{HTML}{91D18B}
+\definecolor{epink}{HTML}{F582A7}
+
+\begin{document}
+\pagecolor{emauve!70!black}
+
+%Code is a little bit messy but it's so easy 
+
+\begin{tikzpicture}[>=stealth, scale=2.25]
+
+%Play with this factor to get the cos function at any angle (varyit from 90 to 270)
+\def\i{130}
+
+\coordinate(o) at (0,0);
+\coordinate(m) at (\i:1.5);
+\coordinate(a) at (0,1.5);
+\pic[draw,egreen,->, line width=0.4mm ,inner sep=1pt, circle, draw,angle
+eccentricity=1.45,angle radius = 9.5mm] {angle = a--o--m};
+
+\draw[epink, line width=0.4mm] (0,0)--(\i:1.5);
+\filldraw[egreen] (\i:1.5)circle(0.02) node[below left] {$M$};
+\draw[epink, dashed, line width=0.2mm] (\i:1.5)--({(\i-90)*pi/180},{1.5*cos((\i-90)*pi/180 r)});
+\fill[epink,variable=\t, domain=0:(\i-90)*pi/180 , opacity=0.5] (0,1.5)--plot({\t}, {1.5*cos(\t r)})--({(\i-90)*pi/180},0)--(0,0)--cycle;
+
+\draw[line width=0.6mm, eviolet, ->] (0,0)--(pi+1,0) node[above, eviolet, scale=2] {$t$};
+\draw[line width=0.6mm, eviolet, ->] (0,-2)--(0,2);
+
+\draw[line width=0.2mm, dashed, egreen] (0,1.5)arc[start angle =90, end angle =270, x radius = 1.5cm, y radius = 1.5cm];
+\draw[line width=0.4mm, egreen,samples=300,smooth,variable=\t,domain=0:(\i-90)*pi/180] plot(\t,{1.5*cos(\t r)});
+
+\filldraw[egreen] (pi,0)circle(0.02);
+\draw[dashed, egreen] (pi,0)node[above, scale=2]{$\pi$};
+\node[egreen, scale=2] at ({pi/2+1/2-(1.5)/2}, -2.75){Associating a rotating vector to $A\cos(\textcolor{eviolet}{\omega t})$};
+\node[scale=2, egreen, above left] at (0,1.5) {$A$};
+\filldraw[egreen] (0,1.5)circle(0.02);
+\node[scale=2, egreen, below left] at (0,-1.5) {$-A$};
+\filldraw[egreen] (0,-1.5)circle(0.02);
+\filldraw[egreen] (0,0)circle(0.02) node[below right, egreen] {$O$};
+\end{tikzpicture}
+
+\end{document}
