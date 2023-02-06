@@ -27,11 +27,13 @@
 \draw[dashed, violet2] (0,0)circle(2); 
 \draw[dashed, violet3] (0,0)circle(2.5); 
 
+%the vectors associated to the sinusoidal functions
 \draw[line width=0.5mm, ->, violet1] (0,0)--(0:1.5);
 \draw[line width=0.5mm, ->, violet2] (0,0)--(90:2);
 \draw[line width=0.5mm, ->, violet3] (0,0)--(-90:2.5);
 
 \begin{scope}[shift={(5,0)}]
+%x and y axis
 \draw[line width = 0.5mm, egray, ->] (0,-2.5)--(0,2.5);
 \draw[line width = 0.5mm, egray, ->] (0,0)--(2*pi+0.5,0);
 
@@ -42,15 +44,16 @@
 
 \draw[line width=0.25mm, violet3, samples=300, variable=\t, domain=0:2*pi] plot(\t, {-2.5*sin((\t + (90*pi/180)) r)});
 
-
+%marking the (0,f(0)) nodes 
 \coordinate(sin1) at (0,{2*sin((90*pi/180) r)});
 \coordinate(sin2) at (0,{-1.5*sin((0*pi/180) r)});
 \coordinate(sin3) at (0,{-2.5*sin((90*pi/180) r)});
 \end{scope}
 
-\coordinate(vec1) at (90-\i:2);
-\coordinate(vec2) at (0-\i:1.5);
-\coordinate(vec3) at (-90-\i:2.5);
+%arking the tip of the arrows
+\coordinate(vec1) at (90:2);
+\coordinate(vec2) at (0:1.5);
+\coordinate(vec3) at (-90:2.5);
 
 \filldraw[epink] (vec1)circle(0.025);
 \filldraw[epink] (sin1)circle(0.025);
@@ -67,6 +70,6 @@
 
 \end{tikzpicture}
 
-
+%To obtain the animated version you can loop through the angles with a foreach loop, it's simple give it a shot ;) 
 
 \end{document}
