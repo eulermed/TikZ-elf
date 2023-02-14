@@ -1,0 +1,76 @@
+\documentclass[tikz,border=20mm]{standalone}
+\input{prbl}
+
+\usepackage{calligra}
+\usepackage[T1]{fontenc}
+\usepackage{fontawesome5}
+
+%New colors :
+\definecolor{vblue}{HTML}{041562}
+\definecolor{vred}{HTML}{DA1212}
+
+\begin{document}
+
+\begin{tikzpicture}[thick]
+\shade[inner color = vblue, outer color=vred] (0,0)circle(4.5);
+\draw[vblue, line width=0.7mm] (0,0)circle(4.5);
+
+%You can think of a for loop here and draw these things once !
+\draw[line width=0.4mm, vblue] (45:3.5)..controls(60:4) and (65:3)..(80:3.5);
+\draw[line width=0.4mm, vblue] (10:3.5)..controls(25:3) and (30:4)..(45:3.5);
+
+\draw[line width=0.4mm, vblue] (135:3.5)..controls(120:4) and (115:3).. (100:3.5);
+\draw[line width=0.4mm, vblue] (170:3.5)..controls(155:3)and(150:4)..(135:3.5);
+
+\draw[line width=0.4mm, vblue] (-45:3.5)..controls(-60:4) and (-65:3)..(-80:3.5);
+\draw[line width=0.4mm, vblue] (-10:3.5)..controls(-25:3) and (-30:4)..(-45:3.5);
+
+\draw[line width=0.4mm, vblue] (-135:3.5)..controls(-120:4) and (-115:3).. (-100:3.5);
+\draw[line width=0.4mm, vblue] (-170:3.5)..controls(-155:3)and(-150:4)..(-135:3.5);
+
+%The hearts 
+\foreach\i in{45, 135, -45, -135}{
+\node[vblue, rotate=-90+\i] at (\i:4) {\faHeart};
+\node[vblue, rotate=90+\i] at (\i:3) {\faHeart};
+\node[vblue, rotate=-90+\i+35] at (\i+35:3.5) {\faHeart};
+\node[vblue, rotate=-90+\i-35] at (\i-35:3.5) {\faHeart};
+\node[vred, scale=0.5, rotate=-90+\i+35] at (\i+35:3.5) {\faHeart};
+\node[vred, scale=0.5, rotate=-90+\i-35] at (\i-35:3.5) {\faHeart};
+}
+%The curvy lines and the I love you text
+\foreach\i in{0,90,180,270}{
+\draw[vblue, line width=0.5mm] (\i:2.5) ..controls(\i+5:2.75) and (\i-5:3.25)..(\i:3.75);
+\fill[vblue] (\i:3.75)circle(0.05);
+\begin{scope}[shift={(\i:3.75)}]
+\draw[vblue,line width=0.5mm, rotate=\i+90] (0,0)..controls(0.25,-0.25)and(0.75,0.25)..(1,0);
+\draw[vblue,line width=0.5mm, rotate=\i+90] (0,0)..controls(-0.25,-0.25)and(-0.75,0.25)..(-1,0);
+\end{scope}
+\node[rotate=\i-90, vblue] at (\i:4.1) {\calligra I love you};
+}
+
+%The inner layer
+\shade[inner color = vred, outer color=vblue!98] (0,0)circle(2.5);
+\draw[vred, line width=0.7mm] (0,0)circle(2.5);
+
+\foreach\i in{36, 72,108, ...,360}{
+%The petals
+\draw[vred, fill=vblue] (\i:0.2)to[bend right=30](\i:0.75)to[bend right=30](\i:0.2);
+
+%The inside blue heart
+\node[rotate=\i-90, vblue, scale=0.95] at (\i:1.25) {\faHeart};
+
+%The outer layer of the heart 
+\node[rotate=\i-90, vred] at (\i:1.25) {\faHeart[regular]};
+%The lines and their decorations
+\draw[line width=0.1mm, postaction={decorate,decoration={markings,mark=at position 1 with{\node[scale=0.25, vred, rotate=\i-90-18] {\faHeart}; }}}, vblue] (\i+18:0.25)..controls (\i+10:1.25) and (\i+18+10:1.75) ..(\i+18:2);
+
+\draw[vred, line width=0.1mm] (\i:1.5)..controls (\i-5:1.7) and (\i+5:1.8)..(\i:2);  
+
+\draw[thick, vred, postaction={decorate,decoration={markings,mark=at position .75 with{ \fill[vblue] circle[radius=0.025]; }}} ] (\i:0.75)--(\i:1);
+}
+%The Kernel 
+\draw[vred, fill=vblue] (0,0)circle(0.25);
+\node[vred, scale=0.75] at (-0.01,0) {\faHeart};
+
+\end{tikzpicture}
+\end{document}
