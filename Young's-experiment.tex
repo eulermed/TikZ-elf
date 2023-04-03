@@ -1,0 +1,81 @@
+\documentclass[tikz, border=40mm]{standalone}
+\input{prbl.tex}
+
+\usepackage{amsmath, amsfonts}
+
+
+
+\definecolor{eblue}{HTML}{0002A1}
+\definecolor{esky}{HTML}{332FD0}
+\definecolor{eblack}{HTML}{121013}
+\definecolor{epurple}{HTML}{570A57}
+\definecolor{epink}{HTML}{F582A7}
+
+
+\makeatletter
+\newcommand*\eulermed{{
+\scalebox{3.3}{$\mathbb{E}$}\kern-1pt \scalebox{1.5}{u$\ell\varepsilon\rho$}\kern-30pt
+\raisebox{12pt}{\scalebox{1.5}{$\mathcal{M}\varepsilon\delta$}}}
+\@}
+\makeatother
+
+\begin{document}
+\pagecolor{epurple}
+\tdplotsetmaincoords{75}{40}
+\begin{tikzpicture}[>=stealth,tdplot_main_coords, scale=1.5, ]
+
+%The source
+
+\begin{scope}[canvas is yz plane at x=0, transform shape]
+\draw[densely dotted, eblack] (-4,0) grid (4,4);
+\draw[line width=0.5mm, eblack, fill=eblack!90] (0,2)circle(0.2) node[above left, epink] {Source lumineuse};
+\node[epink, opacity=0.5] at (0,3.25) {\scalebox{3}{Made by} \scalebox{1}{ 
+ \eulermed{}}};
+\end{scope}
+
+%The laser (Photons)
+\begin{scope}[canvas is xy plane at z=2, transform shape]
+\shade[top color= epink, bottom color=epink!20] (0,0)--(3.5,0.5)--(3.5,-0.5)--cycle;
+\draw[line cap=round, line width=0.2mm, epink] (0,0)--(3.5,0.5);
+\draw[line cap=round, line width=0.2mm, epink] (0,0)--(3.5,-0.5);
+\end{scope}
+
+%The distances D_s and D
+%We use \pgflowlevelsynccm to apply the transformation on arrows too
+\begin{scope}[canvas is xy plane at z=0, transform shape]
+\pgflowlevelsynccm
+\draw[epink, <->] (0,0)--(4,0) node[above, midway] {$D_s$};
+\draw[epink, <->] (8,0)--(4,0) node[above, midway] {$D$};
+\end{scope}
+
+%The double slit screen
+\begin{scope}[canvas is yz plane at x=4, transform shape]
+\draw[line width=0.5mm, eblack] (0,0)--(0,1);
+\fill[fill=epurple!30!white, opacity=0.5](-1,1)--(-1,3)--(1,3)--(1,2.5)--(-0.6,2.5)--(-0.6,1)--(-1,1)  (-1,1)--(1,1)--(1,2.5)--(0.6,2.5)--(0.6,1.5)--(0.5,1.5)--(0.5,2.5)--(-0.5,2.5)--(-0.5,1.5)--(-0.6,1.5)--(-0.6,1);
+\draw[line width=0.5mm, eblack] (-1,1)rectangle(1,3);
+\draw[line width=0.5mm, eblack] (-0.6,1.5)rectangle(-0.5,2.5);
+\draw[line width=0.5mm, eblack] (0.6,1.5)rectangle(0.5,2.5);
+\pgflowlevelsynccm
+\draw[->, eblack, line width=0.25mm] (0,1)--(0,3.5) node[left] {$y$};
+\draw[->, eblack, line width=0.25mm] (-1.25,2)--(1.25,2) node[above] {$x$};
+\draw[<->, epink, line width=0.3mm] (0,2.25)--(0.5,2.25) node[above, midway] {$a$}; 
+\end{scope}
+
+%The screen
+\begin{scope}[canvas is yz plane at x=8, transform shape]
+\draw[line width=0.5mm, eblack] (0,0)--(0,1);
+\draw[line width=0.5mm, eblack, fill=epurple!20] (-1,1)rectangle(1,3);
+
+\shade[right color=epink!60,left color=epink!60,middle color=epink] (0.1,1)rectangle(-0.1,3);
+\shade[right color=epink!50,left color=epink!50,middle color=epink!70] (0.3,1)rectangle(0.5,3);
+\shade[right color=epink!50,left color=epink!50,middle color=epink!70] (-0.3,1)rectangle(-0.5,3);
+\shade[right color=epink!30,left color=epink!30,middle color=epink!50] (-0.7,1)rectangle(-0.9,3);
+\shade[right color=epink!30,left color=epink!30,middle color=epink!50] (0.7,1)rectangle(0.9,3);
+\draw[line width=0.5mm, eblack] (-1,1)rectangle(1,3);
+%sinc(x) 
+\begin{scope}[yshift=3.5cm]
+\draw[samples=700,line width=0.6mm , epink, domain=-1:1, variable=\t] plot(\t,{sin(20*\t r)/(20*\t)});
+\end{scope}
+\end{scope}
+\end{tikzpicture}
+\end{document}
