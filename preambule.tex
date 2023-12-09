@@ -1,9 +1,23 @@
 % !TeX program = luatex
+
 %===This is the preambule I call in every file===
+
 \usepackage{tikz}
 \usepackage{xcolor}
 \usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
+\usepackage{circuitikz}
 \usepackage{tikz-3dplot}
-%TikZ==Libraries
-\usetikzlibrary{circuits.ee.IEC, arrows.meta, shapes.geometric, positioning, perspective, patterns.meta, decorations.pathreplacing, decorations.pathmorphing, patterns, snakes, arrows, shapes, decorations.text, angles, quotes,calc, 3d,decorations.markings, math, intersections}
+\pgfplotsset{compat=newest}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, perspective, patterns.meta, decorations.pathreplacing, decorations.pathmorphing, patterns, arrows.meta, shapes, shapes.geometric, decorations.text, angles, quotes,calc, 3d, decorations.markings, math, circuits.ee.IEC,hobby, knots, intersections, through}
+
+
+%=== The Euler Med Logo ===
+%=== i.e. My signature ===
+
+\usepackage{amsmath, amsfonts}
+\makeatletter
+\newcommand*\eulermed{{
+\scalebox{3.3}{$\mathbb{E}$}\kern-1pt \scalebox{1.5}{u$\ell\varepsilon\rho$}\kern-55pt
+\raisebox{19pt}{\scalebox{1.5}{$\mathcal{M}\varepsilon\delta$}}}
+\@}
+\makeatother
