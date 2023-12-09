@@ -1,0 +1,328 @@
+\documentclass[tikz, border=45mm]{standalone}
+
+\usepackage{tikz}
+\usepackage[]{eso-pic}
+\usepackage{luacode,pgfplots}
+\definecolor{ecyan}{HTML}{00FFFF}
+\definecolor{eblack}{HTML}{212529}
+\definecolor{emauve}{HTML}{3D0043}
+\definecolor{eviolet}{HTML}{E11D74}
+\definecolor{egreen}{HTML}{91D18B}
+\definecolor{egray}{HTML}{E9E8E8}
+\definecolor{epink}{HTML}{FFABE1}
+\definecolor{ewhite}{HTML}{FBF8FD}
+\definecolor{violet1}{HTML}{937DC2}
+\definecolor{violet2}{HTML}{F70776}
+\definecolor{violet3}{HTML}{EA21A2}
+\usepackage[]{amsmath, amssymb}
+\makeatletter
+\newcommand*\eulermed{{
+\scalebox{3.3}{$\mathbb{E}$}\kern-1pt \scalebox{1.5}{u$\ell\varepsilon\rho$}\kern-30pt
+\raisebox{12pt}{\scalebox{1.5}{$\mathcal{M}\varepsilon\delta$}}}
+\@}
+\makeatother
+
+
+
+
+
+
+
+\usetikzlibrary{decorations.markings}
+
+
+\tikzset{test/.style n args={3}{
+    postaction={
+    decorate,
+    decoration={
+    markings,
+    mark=between positions 0 and \pgfdecoratedpathlength step 0.5pt with {
+    \pgfmathsetmacro\myval{multiply(
+        divide(
+        \pgfkeysvalueof{/pgf/decoration/mark info/distance from start}, \pgfdecoratedpathlength
+        ),
+        100
+    )};
+    \pgfsetfillcolor{#3!\myval!#2};
+    \pgfpathcircle{\pgfpointorigin}{#1};
+    \pgfusepath{fill};}
+}}}}
+
+
+
+\begin{luacode*}
+-- Differential equation of Lorenz attractor
+function f(x,y,z)
+    local sigma = 3
+    local rho = 26.5
+    local beta = 1
+    return {sigma*(y-x),-x*z + rho*x - y,x*y - beta*z}
+end
+
+-- Code to write PGFplots data as coordinates
+function print_LorAttrWithEulerMethod(h,npoints,option)
+    -- The initial point (x0,y0,z0)
+    local x0 = 0.0
+    local y0 = 1.0
+    local z0 = 0.0
+    -- add random number between -0.25 and 0.25
+    local x = x0 + (math.random()-0.5)/2
+    local y = y0 + (math.random()-0.5)/2
+    local z = z0 + (math.random()-0.5)/2
+    if option ~= [[]] then
+        tex.sprint("\\addplot3[" .. option .. "] coordinates{")
+    else
+        tex.sprint("\\addplot3 coordinates{")
+    end
+    -- dismiss the first 100 points
+    -- to go into the attractor
+    for i=1, 100 do
+        m = f(x,y,z)
+        x = x + h * m[1]
+        y = y + h * m[2]
+        z = z + h * m[3]
+    end
+    for i=1, npoints do
+        m = f(x,y,z)
+        x = x + h * m[1]
+        y = y + h * m[2]
+        z = z + h * m[3]
+        tex.sprint("("..x..","..y..","..z..")")
+    end
+    tex.sprint("}")
+end
+\end{luacode*}
+
+\begin{luacode*}
+function f(x,y,z)
+    local a = 0.2
+    local b = 0.2
+    local c = 3.3
+    return {-y-z,x + a*y,b + z*(x-c)}
+end
+
+-- Code to write PGFplots data as coordinates
+function print_RosAttWithEulerMethod(h,npoints,option)
+    -- The initial point (x0,y0,z0)
+    local x0 = 0.0
+    local y0 = 0.0
+    local z0 = 0.0
+    -- add random number between -0.25 and 0.25
+    local x = x0 
+    local y = y0 
+    local z = z0 
+    if option ~= [[]] then
+        tex.sprint("\\addplot3[" .. option .. "] coordinates{")
+    else
+        tex.sprint("\\addplot3 coordinates{")
+    end
+    -- dismiss the first 100 points
+    -- to go into the attractor
+    for i=1, 100 do
+        m = f(x,y,z)
+        x = x + h * m[1]
+        y = y + h * m[2]
+        z = z + h * m[3]
+    end
+    for i=1, npoints do
+        m = f(x,y,z)
+        x = x + h * m[1]
+        y = y + h * m[2]
+        z = z + h * m[3]
+        tex.sprint("("..x..","..y..","..z..")")
+    end
+    tex.sprint("}")
+end
+\end{luacode*}
+
+
+
+
+
+\newcommand\addLUADEDplot[3][]{%
+  \luadirect{print_LorAttrWithEulerMethod(#2,#3,[[#1]])}%
+}
+\newcommand\addLUADplot[3][]{%
+  \luadirect{print_RosAttWithEulerMethod(#2,#3,[[#1]])}%
+}
+
+\pgfplotsset{compat=newest}
+\begin{document}
+\pagecolor{emauve}
+\foreach \k in {0, 1, ..., 100}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (1,1) {\scalebox{4}{\eulermed}};
+\begin{axis}[hide axis]
+
+\addLUADplot[ecyan!\k!egreen, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {100, 101, 102, ..., 200}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (1,1) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-100}
+\begin{axis}[hide axis]
+\addLUADplot[egreen!\kn!ecyan, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {200, 201, 202, ..., 300}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (1,1) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-200}
+\begin{axis}[hide axis]
+\addLUADplot[ecyan!\kn!egreen, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {300, 301, 302, ..., 400}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (1,1) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-300}
+\begin{axis}[hide axis]
+\addLUADplot[egreen!\kn!ecyan, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {400, 401, 402, ..., 500}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (2,2) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-400}
+\begin{axis}[hide axis]
+\addLUADplot[ecyan!\kn!egreen, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {500, 501, ..., 600}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (2,2) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-500}
+\begin{axis}[hide axis]
+\addLUADplot[egreen!\kn!ecyan, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {600, 601, ..., 700}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (2,2) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-600}
+\begin{axis}[hide axis]
+\addLUADplot[ecyan!\kn!egreen, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {700, 701, ..., 800}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (2,2) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-700}
+\begin{axis}[hide axis]
+\addLUADplot[egreen!\kn!ecyan, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {800, 801, ..., 900}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (2,2) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-800}
+\begin{axis}[hide axis]
+\addLUADplot[ecyan!\kn!egreen, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+
+\foreach \k in {900, 901, ..., 1000}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (2,2) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-900}
+\begin{axis}[hide axis]
+\addLUADplot[egreen!\kn!ecyan, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {1000, 1001, ..., 1100}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (2,2) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-1000}
+\begin{axis}[hide axis]
+\addLUADplot[ecyan!\kn!egreen, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {1100, 1101, ..., 1200}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (2,2) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-1100}
+\begin{axis}[hide axis]
+\addLUADplot[egreen!\kn!ecyan, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {1200, 1201, ..., 1300}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (2,2) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-1200}
+\begin{axis}[hide axis]
+\addLUADplot[ecyan!\kn!egreen, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {1300, 1301, ..., 1400}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (2,2) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-1300}
+\begin{axis}[hide axis]
+\addLUADplot[egreen!\kn!ecyan, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {1400, 1401,..., 1500}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (2,2) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-1400}
+\begin{axis}[hide axis]
+\addLUADplot[ecyan!\kn!egreen, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {1500, 1501, ..., 1600}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (2,2) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-1500}
+\begin{axis}[hide axis]
+\addLUADplot[egreen!\kn!ecyan, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\foreach \k in {1600, 1601,..., 1700}{
+\begin{tikzpicture}
+%\node[opacity=0.25, epink] at (2,2) {\scalebox{4}{\eulermed}};
+\pgfmathtruncatemacro{\kn}{\k-1600}
+\begin{axis}[hide axis]
+\addLUADplot[ecyan!\kn!egreen, line width=0.25mm]{0.025}{\k};
+\end{axis}
+\end{tikzpicture}
+}
+
+\end{document}
+
+
+
+
+
